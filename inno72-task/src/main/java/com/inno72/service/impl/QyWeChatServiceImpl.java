@@ -30,13 +30,14 @@ public class QyWeChatServiceImpl implements QyWeChatService {
 
 		String corpid = taskProperties.getProps().get("corpid");
 		String corpsecret = taskProperties.getProps().get("corpsecret");
+		String accessTokenKey = taskProperties.getProps().get("accessTokenKey");
 		String qyWeChatGetsAccessTokenUrl = taskProperties.getProps().get("qyWeChatGetsAccessTokenUrl");
 
 		String url = MessageFormat.format(qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
 		String result = HttpClient.get(url);
 		JSONObject resultJson = JSON.parseObject(result);
 		if (resultJson.getInteger("errcode") == 0) {
-			redisUtil.set("public:qyWeChatAccessToken", resultJson.getString("access_token"));
+			redisUtil.set(accessTokenKey, resultJson.getString("access_token"));
 			log.info(resultJson.getString("access_token"));
 		} else {
 			log.info(resultJson.getString("errmsg"));

@@ -23,7 +23,7 @@ public class QyWeChatSchedule {
 	@Autowired
 	private QyWeChatService enterpriseWeChatService;
 
-	@Scheduled(cron = "0 0 * * * ? *")
+	@Scheduled(cron = "0 0 * * * ?")
 	public void getAccessToken() {
 
 		log.info("获取企业微信 access_token，开始");
