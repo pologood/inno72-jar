@@ -130,7 +130,6 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-web</artifactId>
-			<version>2.6.2</version>
 		</dependency>
 
 	</dependencies>
@@ -154,5 +153,6 @@
     <module>machine-alarm</module>
     <module>machine-app-backend</module>
     <module>zuul</module>
+    <module>inno72-task</module>
   </modules>
 </project>
