@@ -13,10 +13,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.inno72.common.TaskProperties;
 import com.inno72.plugin.http.HttpClient;
 import com.inno72.redis.IRedisUtil;
-import com.inno72.service.EnterpriseWeChatService;
+import com.inno72.service.QyWeChatService;
 
 @Component
-public class EnterpriseWeChatServiceImpl implements EnterpriseWeChatService {
+public class QyWeChatServiceImpl implements QyWeChatService {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
@@ -29,16 +29,14 @@ public class EnterpriseWeChatServiceImpl implements EnterpriseWeChatService {
 	public void getAccessToken() {
 
 		String corpid = taskProperties.getProps().get("corpid");
-
 		String corpsecret = taskProperties.getProps().get("corpsecret");
+		String qyWeChatGetsAccessTokenUrl = taskProperties.getProps().get("qyWeChatGetsAccessTokenUrl");
 
-		String enterpriseWeChatGetsAccessTokenUrl = taskProperties.getProps().get("enterpriseWeChatGetsAccessTokenUrl");
-
-		String url = MessageFormat.format(enterpriseWeChatGetsAccessTokenUrl, corpid, corpsecret);
+		String url = MessageFormat.format(qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
 		String result = HttpClient.get(url);
 		JSONObject resultJson = JSON.parseObject(result);
 		if (resultJson.getInteger("errcode") == 0) {
-			redisUtil.set("enterpriseWeChatAccessToken", resultJson.getString("access_token"));
+			redisUtil.set("public:qyWeChatAccessToken", resultJson.getString("access_token"));
 			log.info(resultJson.getString("access_token"));
 		} else {
 			log.info(resultJson.getString("errmsg"));

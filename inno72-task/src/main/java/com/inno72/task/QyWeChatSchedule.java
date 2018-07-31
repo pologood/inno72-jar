@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.inno72.service.EnterpriseWeChatService;
+import com.inno72.service.QyWeChatService;
 
 /**
  * @Auther: zhangwenjie
@@ -16,14 +16,14 @@ import com.inno72.service.EnterpriseWeChatService;
  */
 @Configuration
 @EnableScheduling
-public class EnterpriseWeChatSchedule {
+public class QyWeChatSchedule {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private EnterpriseWeChatService enterpriseWeChatService;
+	private QyWeChatService enterpriseWeChatService;
 
-	@Scheduled(fixedRate = 3000)
+	@Scheduled(cron = "0 0 * * * ? *")
 	public void getAccessToken() {
 
 		log.info("获取企业微信 access_token，开始");
