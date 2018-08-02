@@ -23,14 +23,25 @@ public class QyWeChatSchedule {
 	@Autowired
 	private QyWeChatService enterpriseWeChatService;
 
+	@Scheduled(fixedRate = 3000)
+	public void getCheckAgentAccessToken() {
+
+		log.info("获取企业微信 巡检应用 access_token，开始");
+
+		enterpriseWeChatService.getCheckAgentAccessToken();
+
+		log.info("获取企业微信 巡检应用 access_token，结束");
+
+	}
+
 	@Scheduled(cron = "0 0 * * * ?")
-	public void getAccessToken() {
+	public void getMemberAccessToken() {
 
-		log.info("获取企业微信 access_token，开始");
+		log.info("获取企业微信 成员 access_token，开始");
 
-		enterpriseWeChatService.getAccessToken();
+		enterpriseWeChatService.getMemberAccessToken();
 
-		log.info("获取企业微信 access_token，结束");
+		log.info("获取企业微信 成员 access_token，结束");
 
 	}
 }

@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.inno72.config.client.AbstractProperties;
 
-@ConfigurationProperties(value = "inno72.task")
-public class TaskProperties extends AbstractProperties {
+@ConfigurationProperties(value = "inno72.qyWeChat")
+public class QyWeChatProperties extends AbstractProperties {
 
 }

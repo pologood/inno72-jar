@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.inno72.common.TaskProperties;
+import com.inno72.common.QyWeChatProperties;
 import com.inno72.plugin.http.HttpClient;
 import com.inno72.redis.IRedisUtil;
 import com.inno72.service.QyWeChatService;
@@ -23,15 +23,35 @@ public class QyWeChatServiceImpl implements QyWeChatService {
 	private IRedisUtil redisUtil;
 
 	@Resource
-	private TaskProperties taskProperties;
+	private QyWeChatProperties qyWeChatProperties;
 
 	@Override
-	public void getAccessToken() {
+	public void getCheckAgentAccessToken() {
 
-		String corpid = taskProperties.getProps().get("corpid");
-		String corpsecret = taskProperties.getProps().get("corpsecret");
-		String accessTokenKey = taskProperties.getProps().get("accessTokenKey");
-		String qyWeChatGetsAccessTokenUrl = taskProperties.getProps().get("qyWeChatGetsAccessTokenUrl");
+		String corpid = qyWeChatProperties.getProps().get("corpid");
+		String corpsecret = qyWeChatProperties.getProps().get("checkAgentCorpsecret");
+		String accessTokenKey = qyWeChatProperties.getProps().get("qyCheckAgentAccTokenKey");
+		String qyWeChatGetsAccessTokenUrl = qyWeChatProperties.getProps().get("qyWeChatGetsAccessTokenUrl");
+
+		String url = MessageFormat.format(qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
+		String result = HttpClient.get(url);
+		JSONObject resultJson = JSON.parseObject(result);
+		if (resultJson.getInteger("errcode") == 0) {
+			redisUtil.set(accessTokenKey, resultJson.getString("access_token"));
+			log.info(resultJson.getString("access_token"));
+		} else {
+			log.info(resultJson.getString("errmsg"));
+		}
+
+	}
+
+	@Override
+	public void getMemberAccessToken() {
+
+		String corpid = qyWeChatProperties.getProps().get("corpid");
+		String corpsecret = qyWeChatProperties.getProps().get("qyUserCorpsecret");
+		String accessTokenKey = qyWeChatProperties.getProps().get("qyUserAccTokenKey");
+		String qyWeChatGetsAccessTokenUrl = qyWeChatProperties.getProps().get("qyWeChatGetsAccessTokenUrl");
 
 		String url = MessageFormat.format(qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
 		String result = HttpClient.get(url);
