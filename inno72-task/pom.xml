@@ -10,6 +10,7 @@
   <artifactId>inno72-task</artifactId>
   <name>inno72-task</name>
   <url>http://maven.apache.org</url>
+  <packaging>war</packaging>
   <properties>
 		<mongo.version>0.0.1-SNAPSHOT</mongo.version>
 		<mapper.version>4.0.3</mapper.version>
