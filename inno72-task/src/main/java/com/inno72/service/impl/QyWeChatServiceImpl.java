@@ -49,7 +49,7 @@ public class QyWeChatServiceImpl implements QyWeChatService {
 	public void getMemberAccessToken() {
 
 		String corpid = qyhProperties.getProps().get("corpid");
-		String corpsecret = qyhProperties.getProps().get("qyUserCorpsecret");
+		String corpsecret = qyhProperties.getProps().get("userCorpsecret");
 		String accessTokenKey = qyhProperties.getProps().get("qyUserAccTokenKey");
 
 		String url = MessageFormat.format(CommonConstants.qyWeChatGetsAccessTokenUrl, corpid, corpsecret);

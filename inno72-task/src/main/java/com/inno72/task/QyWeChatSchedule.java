@@ -23,7 +23,7 @@ public class QyWeChatSchedule {
 	@Autowired
 	private QyWeChatService enterpriseWeChatService;
 
-	@Scheduled(fixedRate = 3000)
+	@Scheduled(cron = "0 0 * * * ?")
 	public void getCheckAgentAccessToken() {
 
 		log.info("获取企业微信 巡检应用 access_token，开始");
