@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.inno72.common.QyWeChatProperties;
+import com.inno72.common.CommonConstants;
+import com.inno72.config.client.QyhProperties;
 import com.inno72.plugin.http.HttpClient;
 import com.inno72.redis.IRedisUtil;
 import com.inno72.service.QyWeChatService;
@@ -23,17 +24,16 @@ public class QyWeChatServiceImpl implements QyWeChatService {
 	private IRedisUtil redisUtil;
 
 	@Resource
-	private QyWeChatProperties qyWeChatProperties;
+	private QyhProperties qyhProperties;
 
 	@Override
 	public void getCheckAgentAccessToken() {
 
-		String corpid = qyWeChatProperties.getProps().get("corpid");
-		String corpsecret = qyWeChatProperties.getProps().get("checkAgentCorpsecret");
-		String accessTokenKey = qyWeChatProperties.getProps().get("qyCheckAgentAccTokenKey");
-		String qyWeChatGetsAccessTokenUrl = qyWeChatProperties.getProps().get("qyWeChatGetsAccessTokenUrl");
+		String corpid = qyhProperties.getProps().get("corpid");
+		String corpsecret = qyhProperties.getProps().get("checkAgentCorpsecret");
+		String accessTokenKey = qyhProperties.getProps().get("qyCheckAgentAccTokenKey");
 
-		String url = MessageFormat.format(qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
+		String url = MessageFormat.format(CommonConstants.qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
 		String result = HttpClient.get(url);
 		JSONObject resultJson = JSON.parseObject(result);
 		if (resultJson.getInteger("errcode") == 0) {
@@ -48,12 +48,11 @@ public class QyWeChatServiceImpl implements QyWeChatService {
 	@Override
 	public void getMemberAccessToken() {
 
-		String corpid = qyWeChatProperties.getProps().get("corpid");
-		String corpsecret = qyWeChatProperties.getProps().get("qyUserCorpsecret");
-		String accessTokenKey = qyWeChatProperties.getProps().get("qyUserAccTokenKey");
-		String qyWeChatGetsAccessTokenUrl = qyWeChatProperties.getProps().get("qyWeChatGetsAccessTokenUrl");
+		String corpid = qyhProperties.getProps().get("corpid");
+		String corpsecret = qyhProperties.getProps().get("qyUserCorpsecret");
+		String accessTokenKey = qyhProperties.getProps().get("qyUserAccTokenKey");
 
-		String url = MessageFormat.format(qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
+		String url = MessageFormat.format(CommonConstants.qyWeChatGetsAccessTokenUrl, corpid, corpsecret);
 		String result = HttpClient.get(url);
 		JSONObject resultJson = JSON.parseObject(result);
 		if (resultJson.getInteger("errcode") == 0) {

@@ -6,7 +6,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
-import com.inno72.common.QyWeChatProperties;
+import com.inno72.config.client.QyhProperties;
 import com.inno72.springboot.web.SpringApplicationBuilder;
 import com.inno72.springboot.web.SpringBootServletInitializer;
 
@@ -14,7 +14,7 @@ import com.inno72.springboot.web.SpringBootServletInitializer;
 @EnableFeignClients
 @EnableEurekaClient
 @EnableCircuitBreaker // 开启熔断
-@EnableConfigurationProperties({ QyWeChatProperties.class })
+@EnableConfigurationProperties({ QyhProperties.class })
 public class Inno72TaskApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
