@@ -52,7 +52,6 @@ public class JobFactory {
 				return;
 			}
 			sched.pauseTrigger(triggerKey);
-			;// 停止触发器
 			sched.unscheduleJob(triggerKey);// 移除触发器
 			sched.deleteJob(jobKey);// 删除任务
 		} catch (Exception e) {
