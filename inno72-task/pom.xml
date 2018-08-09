@@ -1,17 +1,18 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.inno72</groupId>
-    <artifactId>inno72-jar</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>inno72-task</artifactId>
-  <name>inno72-task</name>
-  <url>http://maven.apache.org</url>
-  <packaging>jar</packaging>
-  <properties>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.inno72</groupId>
+		<artifactId>inno72-jar</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>inno72-task</artifactId>
+	<name>inno72-task</name>
+	<url>http://maven.apache.org</url>
+	<packaging>jar</packaging>
+	<properties>
 		<mongo.version>0.0.1-SNAPSHOT</mongo.version>
 		<mapper.version>4.0.3</mapper.version>
 		<java.version>1.8</java.version>
@@ -62,7 +63,16 @@
 			<groupId>com.inno72</groupId>
 			<artifactId>inno72-http</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.inno72</groupId>
+			<artifactId>inno72-mongo</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency> 
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
