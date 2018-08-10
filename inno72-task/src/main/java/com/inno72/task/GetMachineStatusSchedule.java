@@ -41,11 +41,11 @@ public class GetMachineStatusSchedule {
 			LocalDateTime createTime = machineLogInfo.getCreateTime();
 			Duration duration = Duration.between(createTime, LocalDateTime.now());
 			long between = duration.toMinutes();
-			// if (between <= 2) {
-			machineCodeList.add(machineLogInfo.getMachineId());
-			// }
+			if (between <= 2) {
+				machineCodeList.add(machineLogInfo.getMachineId());
+			}
 		}
-		List<List<String>> splitList = split(machineCodeList, 5);
+		List<List<String>> splitList = split(machineCodeList, 10);
 		int i = 1;
 		for (List<String> list : splitList) {
 			LocalDateTime now = LocalDateTime.now().plusMinutes(i);
