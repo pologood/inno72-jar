@@ -24,8 +24,13 @@ public class QuartzJobFactory implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
 			JobInfo scheduleJob = (JobInfo) context.getMergedJobDataMap().get("jobInfo");
-			log.info("获取机器{}的状态", scheduleJob.getMachineCode().toString());
-			updateMachineStatus(scheduleJob.getMachineCode(), scheduleJob.getTaskProperties());
+			if (scheduleJob.getTaskType() == 2) {
+				String taskid = scheduleJob.getTaskId();
+				scheduleJob.getTaskService().executeTask(taskid);
+			} else {
+				log.info("获取机器{}的状态", scheduleJob.getMachineCode().toString());
+				updateMachineStatus(scheduleJob.getMachineCode(), scheduleJob.getTaskProperties());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

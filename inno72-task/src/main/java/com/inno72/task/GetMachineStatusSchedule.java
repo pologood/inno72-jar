@@ -56,6 +56,7 @@ public class GetMachineStatusSchedule {
 			JobInfo job = new JobInfo();
 			job.setMachineCode(list);
 			job.setTaskProperties(taskProperties);
+			job.setTaskType(1);
 			log.info("此次获取机器状态共{}次，将在{}执行第{}次", splitList.size(), DateUtil.toTimeStr(now, DateUtil.DF_FULL_S1), i++);
 			JobFactory.addJob(corn.toString(), QuartzJobFactory.class, corn.toString(), job);
 		}
