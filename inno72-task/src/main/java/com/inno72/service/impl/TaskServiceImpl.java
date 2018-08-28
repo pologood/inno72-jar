@@ -65,7 +65,7 @@ public class TaskServiceImpl extends AbstractService<Inno72Task> implements Task
 	private SendMessageTaskBean buildSendMsg(Inno72TaskMachine taskMachine, Inno72Task task) {
 		SendMessageTaskBean bean = new SendMessageTaskBean();
 		bean.setMachineId(taskMachine.getMachineCode());
-		bean.setEventType(task.getStatus());
+		bean.setEventType(task.getType());
 		bean.setDoType(task.getDoType());
 		bean.setTaskId(taskMachine.getId());
 		Map<String, Object> map = new HashMap<>();
