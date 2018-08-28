@@ -19,7 +19,7 @@ public class GetPaiYangNowDataSchedule {
     @Resource
     private TaskProperties taskProperties;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void addData(){
         logger.info("执行插入派样活动商品数量统计数据定时开始");
         String url = taskProperties.getProps().get("setPaiYangTotalData");
