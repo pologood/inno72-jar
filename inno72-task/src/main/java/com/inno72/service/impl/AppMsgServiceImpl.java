@@ -46,8 +46,11 @@ public class AppMsgServiceImpl extends AbstractService<Inno72AppMsg> implements 
 
 	@Override
 	public void sendPushMsg(SendMessageTaskBean bean) {
+		Map<String, Object> p = new HashMap<>();
+		p.put("pushType", 10);
+		p.put("msgInfo", bean);
 		Map<String, String> params = new HashMap<>();
-		params.put("msg", JSON.toJSONString(bean));
+		params.put("msg", JSON.toJSONString(p));
 		msgUtil.sendPush("push_android_transmission_common", params, bean.getMachineId(),
 				"machine-app-backend--pushMsg", "", "");
 	}
