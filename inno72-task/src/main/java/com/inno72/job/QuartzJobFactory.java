@@ -24,6 +24,7 @@ public class QuartzJobFactory implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
 			JobInfo scheduleJob = (JobInfo) context.getMergedJobDataMap().get("jobInfo");
+			log.info("执行定时任务");
 			if (scheduleJob.getTaskType() == 2) {
 				String taskid = scheduleJob.getTaskId();
 				scheduleJob.getTaskService().executeTask(taskid);

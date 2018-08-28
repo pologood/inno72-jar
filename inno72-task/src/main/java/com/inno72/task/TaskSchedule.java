@@ -73,6 +73,7 @@ public class TaskSchedule {
 		corn.append("0 ").append(doTime.getMinute()).append(" ").append(doTime.getHour()).append(" ")
 				.append(doTime.getDayOfMonth()).append(" ").append(doTime.getMonthValue()).append(" ? ")
 				.append(doTime.getYear());
+		log.info(corn.toString());
 		JobFactory.addJob(taskId, QuartzJobFactory.class, corn.toString(), info);
 	}
 
