@@ -49,9 +49,9 @@ public class TaskServiceImpl extends AbstractService<Inno72Task> implements Task
 				machine.setDoTime(LocalDateTime.now());
 				taskMachineService.update(machine);
 				SendMessageTaskBean msg = buildSendMsg(machine, task);
-				if ("1".equals(task.getDoType())) {
+				if (task.getDoType() == 1) {
 					appMsgService.sendSocketMsg(msg);
-				} else if ("2".equals(task.getDoType())) {
+				} else if (task.getDoType() == 2) {
 					appMsgService.sendPushMsg(msg);
 				}
 			}
