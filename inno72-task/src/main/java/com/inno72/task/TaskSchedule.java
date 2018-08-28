@@ -70,10 +70,9 @@ public class TaskSchedule {
 		info.setTaskService(taskService);
 		info.setTaskId(taskId);
 		StringBuffer corn = new StringBuffer();
-		corn.append("0 ").append(doTime.getMinute()).append(" ").append(doTime.getHour()).append(" ")
-				.append(doTime.getDayOfMonth()).append(" ").append(doTime.getMonthValue()).append(" ? ")
+		corn.append(doTime.getSecond()).append(" ").append(doTime.getMinute()).append(" ").append(doTime.getHour())
+				.append(" ").append(doTime.getDayOfMonth()).append(" ").append(doTime.getMonthValue()).append(" ? ")
 				.append(doTime.getYear());
-		log.info(corn.toString());
 		JobFactory.addJob(taskId, QuartzJobFactory.class, corn.toString(), info);
 	}
 

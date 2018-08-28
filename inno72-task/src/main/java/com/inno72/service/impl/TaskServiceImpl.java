@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.inno72.bean.SendMessageTaskBean;
 import com.inno72.common.AbstractService;
+import com.inno72.mapper.Inno72TaskMachineMapper;
 import com.inno72.mapper.Inno72TaskMapper;
 import com.inno72.model.Inno72Task;
 import com.inno72.model.Inno72TaskMachine;
@@ -33,21 +34,15 @@ public class TaskServiceImpl extends AbstractService<Inno72Task> implements Task
 	private TaskMachineService taskMachineService;
 	@Resource
 	private AppMsgService appMsgService;
+	@Resource
+	private Inno72TaskMachineMapper inno72MachineMapper;
 
 	@Override
 	public void executeTask(String taskId) {
 		Inno72Task task = inno72TaskMapper.selectByPrimaryKey(taskId);
 		Condition condition = new Condition(Inno72TaskMachine.class);
-		List<Inno72TaskMachine> taskMachines = null;
-		if ("0".equals(task.getStatus())) {
-			condition.createCriteria().andEqualTo("taskId", task.getId());
-			taskMachines = taskMachineService.findByCondition(condition);
-		} else if ("3".equals(task.getStatus())) {
-			condition.createCriteria().andEqualTo("taskId", task.getId()).andNotEqualTo("doStatus", 1);
-			taskMachines = taskMachineService.findByCondition(condition);
-		} else {
-			return;
-		}
+		condition.createCriteria().andEqualTo("taskId", task.getId()).andNotEqualTo("doStatus", 1);
+		List<Inno72TaskMachine> taskMachines = taskMachineService.findByCondition(condition);
 		if (taskMachines != null) {
 			for (Inno72TaskMachine machine : taskMachines) {
 				machine.setDoType(task.getDoType());
