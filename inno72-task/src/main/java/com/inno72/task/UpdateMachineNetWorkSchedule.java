@@ -28,7 +28,7 @@ public class UpdateMachineNetWorkSchedule {
 	@Resource
 	private IRedisUtil redisUtil;
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/2 * * * ?")
 	public void updateMachineNetWorkStatus() {
 		log.info("=======================更新网络状态====================");
 		Condition condition = new Condition(Inno72Machine.class);
@@ -44,7 +44,9 @@ public class UpdateMachineNetWorkSchedule {
 				list.add(machine.getId());
 			}
 		}
-		inno72MachineMapper.updateNetStatus(list);
+		if (!list.isEmpty()) {
+			inno72MachineMapper.updateNetStatus(list);
+		}
 	}
 
 }
