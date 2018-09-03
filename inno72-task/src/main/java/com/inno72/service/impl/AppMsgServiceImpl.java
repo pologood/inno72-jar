@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.inno72.bean.SendMessageBean;
 import com.inno72.bean.SendMessageTaskBean;
 import com.inno72.common.AbstractService;
 import com.inno72.common.utils.StringUtil;
@@ -53,6 +54,19 @@ public class AppMsgServiceImpl extends AbstractService<Inno72AppMsg> implements 
 		params.put("msg", JSON.toJSONString(p));
 		msgUtil.sendPush("push_android_transmission_common", params, bean.getMachineId(),
 				"machine-app-backend--pushMsg", "", "");
+	}
+
+	@Override
+	public void sendSocketMsg(SendMessageBean bean) {
+		String result = GZIPUtil.compress(AesUtils.encrypt(JSON.toJSONString(bean)));
+		Inno72AppMsg msg1 = new Inno72AppMsg();
+		msg1.setId(StringUtil.uuid());
+		msg1.setCreateTime(LocalDateTime.now());
+		msg1.setMachineCode(bean.getMachineId());
+		msg1.setContent(result);
+		msg1.setStatus(0);
+		msg1.setMsgType(4);
+		save(msg1);
 	}
 
 }

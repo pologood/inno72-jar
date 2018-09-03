@@ -36,7 +36,7 @@ public class TaskSchedule {
 	@Resource
 	private AppMsgService appMsgService;
 
-	@Scheduled(cron = "0 */1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	public void getTasks() {
 		Condition condition = new Condition(Inno72Task.class);
 		List<Integer> list = new ArrayList<>();
@@ -61,7 +61,7 @@ public class TaskSchedule {
 			}
 
 		}
-		log.info("===================执行完成任务==============");
+		log.info("===================任务执行完成==============");
 	}
 
 	private void addJob(LocalDateTime doTime, String taskId) {
