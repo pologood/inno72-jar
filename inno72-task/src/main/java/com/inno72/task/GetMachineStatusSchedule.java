@@ -43,8 +43,7 @@ public class GetMachineStatusSchedule {
 			return;
 		}
 		for (String key : keys) {
-			String code = redisUtil.get(key);
-			machineCodeList.add(code);
+			machineCodeList.add(key.replace("monitor:session:", ""));
 		}
 		List<List<String>> splitList = split(machineCodeList, 10);
 		int i = 1;
