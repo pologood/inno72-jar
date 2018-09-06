@@ -66,9 +66,9 @@
 		</dependency>
 		<dependency>
 			<groupId>com.inno72</groupId>
-			<artifactId>inno72-mongo</artifactId>
+			<artifactId>inno72-msg</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency> 
+		</dependency>
 		<dependency>  
             <groupId>org.quartz-scheduler</groupId>  
             <artifactId>quartz</artifactId>  

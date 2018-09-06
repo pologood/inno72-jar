@@ -1,9 +1,9 @@
 package com.inno72.task;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -11,39 +11,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.inno72.bean.MachineLogInfo;
 import com.inno72.common.DateUtil;
-import com.inno72.common.TaskProperties;
 import com.inno72.job.JobFactory;
 import com.inno72.job.JobInfo;
 import com.inno72.job.QuartzJobFactory;
+import com.inno72.redis.IRedisUtil;
+import com.inno72.service.AppMsgService;
 
 @Configuration
 @EnableScheduling
 public class GetMachineStatusSchedule {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	@Resource
-	private TaskProperties taskProperties;
+	private AppMsgService appMsgService;
+
+	@Resource
+	private IRedisUtil redisUtil;
 
 	@Autowired
-	private MongoOperations mongoTpl;
+	private StringRedisTemplate stringRedisTemplate;
 
-	@Scheduled(cron = "0 */30 * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void getMachineStatus() {
+		Set<String> keys = stringRedisTemplate.keys("monitor:session:*");
 		List<String> machineCodeList = new ArrayList<>();
-		List<MachineLogInfo> netList = mongoTpl.find(new Query(), MachineLogInfo.class, "MachineLogInfo");
-		for (MachineLogInfo machineLogInfo : netList) {
-			LocalDateTime createTime = machineLogInfo.getCreateTime();
-			Duration duration = Duration.between(createTime, LocalDateTime.now());
-			long between = duration.toMinutes();
-			if (between <= 2) {
-				machineCodeList.add(machineLogInfo.getMachineId());
-			}
+		if (keys == null || keys.isEmpty()) {
+			return;
+		}
+		for (String key : keys) {
+			machineCodeList.add(key.replace("monitor:session:", ""));
 		}
 		List<List<String>> splitList = split(machineCodeList, 10);
 		int i = 1;
@@ -55,7 +55,8 @@ public class GetMachineStatusSchedule {
 					.append(now.getYear());
 			JobInfo job = new JobInfo();
 			job.setMachineCode(list);
-			job.setTaskProperties(taskProperties);
+			job.setAppMsgService(appMsgService);
+			job.setTaskType(1);
 			log.info("此次获取机器状态共{}次，将在{}执行第{}次", splitList.size(), DateUtil.toTimeStr(now, DateUtil.DF_FULL_S1), i++);
 			JobFactory.addJob(corn.toString(), QuartzJobFactory.class, corn.toString(), job);
 		}
