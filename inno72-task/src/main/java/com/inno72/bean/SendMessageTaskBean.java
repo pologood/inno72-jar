@@ -10,6 +10,7 @@ public class SendMessageTaskBean {
 	private Integer doType;// 1socket 2push
 	private String taskId;
 	private String machineId;
+	private String id;
 	private Object data;
 
 	public Integer getEventType() {
@@ -50,6 +51,14 @@ public class SendMessageTaskBean {
 
 	public void setTaskId(String taskId) {
 		this.taskId = taskId;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	// public static void main(String[] args) {
