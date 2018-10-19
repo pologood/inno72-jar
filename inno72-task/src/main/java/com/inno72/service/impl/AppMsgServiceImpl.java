@@ -18,7 +18,6 @@ import com.inno72.mapper.Inno72AppMsgMapper;
 import com.inno72.mapper.Inno72LocaleMapper;
 import com.inno72.mapper.Inno72MachineMapper;
 import com.inno72.model.Inno72AppMsg;
-import com.inno72.model.Inno72Locale;
 import com.inno72.model.Inno72Machine;
 import com.inno72.msg.MsgUtil;
 import com.inno72.service.AppMsgService;
@@ -61,13 +60,10 @@ public class AppMsgServiceImpl extends AbstractService<Inno72AppMsg> implements 
 		Map<String, String> params = new HashMap<>();
 		params.put("msg", JSON.toJSONString(p));
 		Inno72Machine machine = inno72MachineMapper.selectByPrimaryKey(bean.getId());
-		if (machine != null) {
-			Inno72Locale local = inno72LocaleMapper.selectByPrimaryKey(machine.getLocaleId());
-			if (local != null && local.getType() == 2) {
-				msgUtil.sendPush("push_android_tm_transmission_common", params, bean.getMachineId(),
-						"machine-app-backend--pushMsg", "", "");
-				return;
-			}
+		if (machine != null && machine.getMachineStatus() == 9) {
+			msgUtil.sendPush("push_android_tm_transmission_common", params, bean.getMachineId(),
+					"machine-app-backend--pushMsg", "", "");
+			return;
 		}
 		msgUtil.sendPush("push_android_transmission_common", params, bean.getMachineId(),
 				"machine-app-backend--pushMsg", "", "");
