@@ -11,8 +11,8 @@ import com.inno72.service.MachineGoodsCountService;
 
 /**
  * @Auther: zhangwenjie
- * @Date: 2018/7/31 12:12
- * @Description:企业微信定时任务
+ * @Date: 2018/10/30 12:12
+ * @Description:统计机器商品剩余数量定时任务
  */
 @Configuration
 @EnableScheduling
@@ -23,8 +23,8 @@ public class MachineGoodsCountSchedule {
 	@Autowired
 	private MachineGoodsCountService machineGoodsCountService;
 
-	@Scheduled(cron = "*/5 * * * * ?")
-	public void getCheckAgentAccessToken() {
+	@Scheduled(cron = "0 30 0 * * ? ")
+	public void saveMachineGoodsCoun() {
 
 		log.info("统计机器商品剩余数量，开始");
 
