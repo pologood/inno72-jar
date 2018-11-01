@@ -34,7 +34,7 @@
 				LEFT JOIN inno72_interact_machine_time imt ON im.id = imt.interact_machine_id
 				LEFT JOIN inno72_machine m ON m.id = im.machine_id
 				LEFT JOIN inno72_interact i ON i.id =im.interact_id
-				WHERE  i.is_delete=0 AND i.`status`=1 AND img.type=0 
+				WHERE  m.machine_status=4 and i.is_delete=0 AND i.`status`=1 AND img.type=0 
 				AND NOW() BETWEEN imt.start_time AND imt.end_time 
 				AND NOW() BETWEEN img.start_time AND img.end_time 
 				UNION 
@@ -43,7 +43,7 @@
 				LEFT JOIN inno72_activity_plan_machine apm ON apm.activity_plan_id = apg.activity_plan_id
 				LEFT JOIN inno72_machine m ON m.id = apm.machine_id 
 				LEFT JOIN inno72_activity a ON a.id =ap.activity_id
-				WHERE  ap.is_delete = 0 AND apg.prize_type = 1 AND NOW( ) BETWEEN ap.start_time AND ap.end_time
+				WHERE  m.machine_status=4 and ap.is_delete = 0 AND apg.prize_type = 1 AND NOW( ) BETWEEN ap.start_time AND ap.end_time
 			) m 
 	 )m ON m.goods_id=g.id
 	ORDER BY m.machine_id
@@ -51,10 +51,10 @@
   
   
   <insert id="insertMachineGoodsList" parameterType="java.util.List">
-        insert into inno72_machine_goods (id,machine_id,goods_id,goods_name,activity_id,activity_type,submit_time)
+        insert into inno72_machine_goods (id,machine_id,goods_id,goods_name,activity_name,activity_id,activity_type,submit_time)
         values
         <foreach collection="list" item="t" index="index" separator=",">
-            (#{t.id}, #{t.machineId},#{t.goodsId},#{t.goodsName},#{t.activityId},#{t.activityType},#{t.submitTime})
+            (#{t.id}, #{t.machineId},#{t.goodsId},#{t.goodsName},#{t.activityName},#{t.activityId},#{t.activityType},#{t.submitTime})
         </foreach>
    </insert>
   
