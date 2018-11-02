@@ -23,14 +23,25 @@ public class MachineGoodsCountSchedule {
 	@Autowired
 	private MachineGoodsCountService machineGoodsCountService;
 
-	@Scheduled(cron = "0 30 0 * * ? ")
-	public void saveMachineGoodsCoun() {
+	@Scheduled(cron = "0 55 23 * * ? ")
+	public void saveMachineGoodsCount() {
 
-		log.info("统计机器商品剩余数量，开始");
+		log.info("统计机器商品历史剩余数量，开始");
 
-		int num = machineGoodsCountService.saveMachineGoodsCoun();
+		int num = machineGoodsCountService.saveMachineGoodsCount(0);
 
-		log.info("统计机器商品剩余数量，结束:" + num);
+		log.info("统计机器商品历史剩余数量，结束:" + num);
+
+	}
+
+	@Scheduled(cron = "0 0 17 * * ? ")
+	public void saveMachineGoodsCountCurrentDate() {
+
+		log.info("统计机器商品当天临时剩余数量，开始");
+
+		int num = machineGoodsCountService.saveMachineGoodsCount(1);
+
+		log.info("统计机器商品当天临时剩余数量，结束:" + num);
 
 	}
 

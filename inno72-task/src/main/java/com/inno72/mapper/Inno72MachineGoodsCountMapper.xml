@@ -9,49 +9,49 @@
     <result column="machine_id" jdbcType="VARCHAR" property="machineId" />
     <result column="goods_id" jdbcType="VARCHAR" property="goodsId" />
     <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="before_num" jdbcType="INTEGER" property="beforeNum" />
+    <result column="add_num" jdbcType="INTEGER" property="addNum" />
     <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="type" jdbcType="INTEGER" property="type" />
     <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   
-  <select id="selectMachineGoods" parameterType="java.util.Map" resultMap="BaseResultMap">
-  	SELECT
+  <select id="selectMachineGoods" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
   		UUID() AS id,
-		scg.goods_id,
-		g.`name`AS goods_name,
-		sum(sc.goods_count) AS num,
-		sc.machine_id,
-		DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s') AS submit_time
-	FROM
-		inno72_supply_channel_goods scg
-		LEFT JOIN inno72_supply_channel sc ON sc.id = scg.supply_channel_id
-		LEFT JOIN inno72_goods g ON scg.goods_id = g.id
-		INNER JOIN (
-	     SELECT * FROM (
-				SELECT img.goods_id,m.id AS machine_id FROM inno72_interact_machine_goods img
-				LEFT JOIN inno72_interact_machine im ON im.id = img.interact_machine_id
-				LEFT JOIN inno72_interact_machine_time imt ON im.id = imt.interact_machine_id
-				LEFT JOIN inno72_machine m ON m.id = im.machine_id
-				LEFT JOIN inno72_interact i ON i.id =im.interact_id
-				WHERE  i.is_delete=0 AND i.`status`=1  AND NOW() BETWEEN imt.start_time AND imt.end_time 
-				UNION 
-				SELECT apg.prize_id AS goods_id,m.id AS machine_id FROM inno72_activity_plan_game_result apg
-				LEFT JOIN inno72_activity_plan ap ON ap.id = apg.activity_plan_id
-				LEFT JOIN inno72_activity_plan_machine apm ON apm.activity_plan_id = apg.activity_plan_id
-				LEFT JOIN inno72_machine m ON m.id = apm.machine_id 
-				WHERE  ap.is_delete = 0 AND apg.prize_type = 1 AND NOW( ) BETWEEN ap.start_time AND ap.end_time
-			) m GROUP BY machine_id,goods_id
-	 )m ON m.goods_id=scg.goods_id AND m.machine_id=sc.machine_id
-	WHERE  sc.is_delete=0  
-	GROUP BY sc.machine_id,scg.goods_id
-	ORDER BY sc.machine_id
+  		am.*,
+  		g.`name`AS goods_name,
+  		IFNULL(mgc.num,0) AS before_num,
+  		IFNULL(hi.num,0) AS add_num,
+  		IFNULL(scg.goods_count,0) AS num,
+  		#{type} AS type,
+  		DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s') AS submit_time
+	from  view_machine_goods am
+	left join inno72_goods g on am.goods_id=g.id
+	left join (
+			select machine_id,goods_id,sum(goods_count) goods_count 
+			from inno72_supply_channel sc 
+			left join inno72_supply_channel_goods scg on sc.id=scg.supply_channel_id
+			group  by sc.machine_id,scg.goods_id
+	) scg on am.machine_id=scg.machine_id and am.goods_id=scg.goods_id
+	left JOIN (
+			select machine_id,goods_id, sum(after_count-before_count) num 
+			from inno72_supply_channel_history hi 
+			where hi.after_count != hi.before_count AND LENGTH(hi.goods_id) >1
+			and DATE_FORMAT(hi.create_time,'%Y-%m-%d')=DATE_FORMAT(CURRENT_DATE,'%Y-%m-%d')
+			group by machine_id,goods_id
+	) hi on am.machine_id=hi.machine_id and am.goods_id=hi.goods_id
+	left join inno72_machine_goods_count mgc on am.goods_id=mgc.goods_id and am.machine_id=mgc.machine_id 
+		and DATE_FORMAT(mgc.submit_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CURRENT_DATE,interval 1 day),'%Y-%m-%d')
   </select>
   
   
   <insert id="insertMachineGoodsCountList" parameterType="java.util.List">
-        insert into inno72_machine_goods_count (id,machine_id,goods_id,goods_name,num,submit_time)
+        insert into inno72_machine_goods_count (id,machine_id,goods_id,goods_name,before_num,add_num,num,submit_time)
         values
         <foreach collection="list" item="t" index="index" separator=",">
-            (#{t.id}, #{t.machineId},#{t.goodsId},#{t.goodsName},#{t.num},#{t.submitTime})
+            (#{t.id}, #{t.machineId},#{t.goodsId},#{t.goodsName},#{t.beforeNum},#{t.addNum},#{t.num},#{t.submitTime})
         </foreach>
     </insert>
   

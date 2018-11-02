@@ -41,17 +41,42 @@ public class Inno72MachineGoodsCount {
 	private String goodsName;
 
 	/**
-	 * 商品数量
+	 * 补货前数量
+	 */
+	@Column(name = "before_num")
+	private Integer beforeNum;
+
+	/**
+	 * 补货数量
+	 */
+	@Column(name = "add_num")
+	private Integer addNum;
+
+	/**
+	 * 剩余数量
 	 */
 	private Integer num;
 
 	/**
-	 * 生成时间
+	 * 
+	 */
+	private Integer type;
+
+	/**
+	 * 统计时间
 	 */
 	@JsonSerialize(using = CustomLocalDateTimeSerializer.class)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "submit_time")
 	private LocalDateTime submitTime;
+
+	/**
+	 * 创建时间
+	 */
+	@JsonSerialize(using = CustomLocalDateTimeSerializer.class)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "create_time")
+	private LocalDateTime createTime;
 
 	/**
 	 * 获取uuid
@@ -129,6 +154,22 @@ public class Inno72MachineGoodsCount {
 		this.goodsName = goodsName;
 	}
 
+	public Integer getBeforeNum() {
+		return beforeNum;
+	}
+
+	public void setBeforeNum(Integer beforeNum) {
+		this.beforeNum = beforeNum;
+	}
+
+	public Integer getAddNum() {
+		return addNum;
+	}
+
+	public void setAddNum(Integer addNum) {
+		this.addNum = addNum;
+	}
+
 	/**
 	 * 获取商品数量
 	 *
@@ -146,6 +187,14 @@ public class Inno72MachineGoodsCount {
 	 */
 	public void setNum(Integer num) {
 		this.num = num;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	/**
@@ -166,4 +215,13 @@ public class Inno72MachineGoodsCount {
 	public void setSubmitTime(LocalDateTime submitTime) {
 		this.submitTime = submitTime;
 	}
+
+	public LocalDateTime getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(LocalDateTime createTime) {
+		this.createTime = createTime;
+	}
+
 }

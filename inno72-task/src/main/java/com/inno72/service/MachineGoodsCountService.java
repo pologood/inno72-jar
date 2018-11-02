@@ -8,6 +8,6 @@ import com.inno72.model.Inno72MachineGoodsCount;
  */
 public interface MachineGoodsCountService extends Service<Inno72MachineGoodsCount> {
 
-	int saveMachineGoodsCoun();
+	int saveMachineGoodsCount(Integer type);
 
 }
