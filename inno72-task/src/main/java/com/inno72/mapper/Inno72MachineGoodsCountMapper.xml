@@ -26,7 +26,7 @@
   		IFNULL(hi.num,0) AS add_num,
   		IFNULL(scg.goods_count,0) AS num,
   		#{type} AS type,
-  		DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s') AS submit_time
+  		DATE_FORMAT(now(),'%Y-%m-%d') AS submit_time
 	from  view_machine_goods am
 	left join inno72_goods g on am.goods_id=g.id
 	left join (
@@ -48,10 +48,10 @@
   
   
   <insert id="insertMachineGoodsCountList" parameterType="java.util.List">
-        insert into inno72_machine_goods_count (id,machine_id,goods_id,goods_name,before_num,add_num,num,submit_time)
+        insert into inno72_machine_goods_count (id,machine_id,goods_id,goods_name,before_num,add_num,num,type,submit_time)
         values
         <foreach collection="list" item="t" index="index" separator=",">
-            (#{t.id}, #{t.machineId},#{t.goodsId},#{t.goodsName},#{t.beforeNum},#{t.addNum},#{t.num},#{t.submitTime})
+            (#{t.id}, #{t.machineId},#{t.goodsId},#{t.goodsName},#{t.beforeNum},#{t.addNum},#{t.num},#{t.type},#{t.submitTime})
         </foreach>
     </insert>
   
