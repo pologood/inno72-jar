@@ -42,7 +42,7 @@
 			and DATE_FORMAT(hi.create_time,'%Y-%m-%d')=DATE_FORMAT(CURRENT_DATE,'%Y-%m-%d')
 			group by machine_id,goods_id
 	) hi on am.machine_id=hi.machine_id and am.goods_id=hi.goods_id
-	left join inno72_machine_goods_count mgc on am.goods_id=mgc.goods_id and am.machine_id=mgc.machine_id 
+	left join inno72_machine_goods_count mgc on am.goods_id=mgc.goods_id and am.machine_id=mgc.machine_id and mgc.type=0
 		and DATE_FORMAT(mgc.submit_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CURRENT_DATE,interval 1 day),'%Y-%m-%d')
   </select>
   
