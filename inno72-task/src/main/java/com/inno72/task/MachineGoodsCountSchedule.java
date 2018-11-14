@@ -23,7 +23,7 @@ public class MachineGoodsCountSchedule {
 	@Autowired
 	private MachineGoodsCountService machineGoodsCountService;
 
-	@Scheduled(cron = "0 55 23 * * ? ")
+	@Scheduled(cron = "*/5 * * * * ?")
 	public void saveMachineGoodsCount() {
 
 		log.info("统计机器商品历史剩余数量，开始");

@@ -24,14 +24,21 @@ public class MachineGoodsCountServiceImpl extends AbstractService<Inno72MachineG
 
 	@Override
 	public int saveMachineGoodsCount(Integer type) {
-		// type:0 23点跑当天记录（删除当天临时记录）；1，下午五点跑当天临时记录
-		/*
-		 * if (type == 0) { // 删除当天临时记录 Inno72MachineGoodsCount temp = new
-		 * Inno72MachineGoodsCount(); temp.setType(1);
-		 * inno72MachineGoodsCountMapper.delete(temp); }
-		 */
-		List<Inno72MachineGoodsCount> list = inno72MachineGoodsCountMapper.selectMachineGoods(type);
+		// type:0 23点跑当天记录（删除当天临时记录）；1，下午五点当天记录(同时添加当天临时数据：2五点临时数据)，
 
+		if (type == 0) { // 删除当天临时记录
+			Inno72MachineGoodsCount temp = new Inno72MachineGoodsCount();
+			temp.setType(2);
+			inno72MachineGoodsCountMapper.delete(temp);
+		} else if (type == 1) {
+			// 添加临时数据：2五点临时数据
+			List<Inno72MachineGoodsCount> listTemp = inno72MachineGoodsCountMapper.selectMachineGoods(2);
+			if (listTemp.size() > 0) {
+				inno72MachineGoodsCountMapper.insertMachineGoodsCountList(listTemp);
+			}
+		}
+
+		List<Inno72MachineGoodsCount> list = inno72MachineGoodsCountMapper.selectMachineGoods(type);
 		int n = 0;
 		if (list.size() > 0) {
 			n = inno72MachineGoodsCountMapper.insertMachineGoodsCountList(list);
