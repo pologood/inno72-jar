@@ -46,6 +46,13 @@ public class CheckMachineAppSchedule implements IJobHandler {
 			List<MachineInstallAppBean> il = new ArrayList<>();
 			List<AppStatus> apps1 = apps.getStatus();
 			int verisonCode = 0;
+
+			AppInstallHistory history = new AppInstallHistory();
+
+			history.setMachineCode(apps.getMachineId());
+			history.setCreateTime(LocalDateTime.now());
+			history.setStatus(0);
+			history.setApps(il);
 			for (AppStatus app : apps1) {
 				if ("com.inno72.installer".equals(app.getAppPackageName())) {
 					verisonCode = app.getVersionCode();
@@ -71,13 +78,7 @@ public class CheckMachineAppSchedule implements IJobHandler {
 				msg.setSubEventType(2);
 				msg.setMachineId(apps.getMachineId());
 				msg.setData(il);
-
-				AppInstallHistory history = new AppInstallHistory();
-
-				history.setMachineCode(apps.getMachineId());
-				history.setCreateTime(LocalDateTime.now());
-				history.setStatus(0);
-				history.setApps(il);
+				history.setStatus(1);
 				String result = GZIPUtil.compress(AesUtils.encrypt(JSON.toJSONString(msg)));
 				String machinKey = "monitor:session:" + msg.getMachineId();
 				String sessionId = redisUtil.get(machinKey);
@@ -90,7 +91,7 @@ public class CheckMachineAppSchedule implements IJobHandler {
 					msg1.setStatus(0);
 					msg1.setMsgType(1);
 					appMsgService.save(msg1);
-					history.setStatus(1);
+					history.setStatus(2);
 				}
 				mongoTpl.save(history, "AppInstallHistory");
 			}
@@ -105,13 +106,13 @@ public class CheckMachineAppSchedule implements IJobHandler {
 
 	@Override
 	public ReturnT<String> execute(String arg0) throws Exception {
-		System.out.println("111111111111111111111");
 		List<MachineAppStatus> appVersions = mongoTpl.find(new Query(), MachineAppStatus.class, "MachineAppStatus");
 		List<String> machineCodes = new ArrayList<>();
 		if (appVersions != null) {
 			for (MachineAppStatus app : appVersions) {
 				if (!StringUtil.isEmpty(app.getMachineId()) && !machineCodes.contains(app.getMachineId())) {
 					checkApp(app);
+					machineCodes.add(app.getMachineId());
 				}
 			}
 		}
