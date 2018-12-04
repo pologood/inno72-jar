@@ -93,8 +93,8 @@ public class CheckMachineAppSchedule implements IJobHandler {
 					appMsgService.save(msg1);
 					history.setStatus(2);
 				}
-				mongoTpl.save(history, "AppInstallHistory");
 			}
+			mongoTpl.save(history, "AppInstallHistory");
 		}
 
 	}
