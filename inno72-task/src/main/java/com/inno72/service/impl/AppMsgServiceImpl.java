@@ -78,6 +78,7 @@ public class AppMsgServiceImpl extends AbstractService<Inno72AppMsg> implements 
 		msg1.setMachineCode(bean.getMachineId());
 		msg1.setContent(result);
 		msg1.setStatus(0);
+
 		msg1.setMsgType(4);
 		save(msg1);
 	}
