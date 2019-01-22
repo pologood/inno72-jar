@@ -68,6 +68,7 @@ public class TaskServiceImpl extends AbstractService<Inno72Task> implements Task
 		bean.setEventType(task.getType());
 		bean.setDoType(task.getDoType());
 		bean.setTaskId(taskMachine.getId());
+		bean.setIsForce(task.getIsForce());
 		bean.setId(taskMachine.getMachineId());
 		Map<String, Object> map = new HashMap<>();
 		map.put("appPackageName", task.getApp());

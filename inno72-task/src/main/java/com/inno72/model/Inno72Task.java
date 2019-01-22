@@ -79,6 +79,12 @@ public class Inno72Task {
 	 */
 	@Column(name = "update_time")
 	private LocalDateTime updateTime;
+	/**
+	 * 强制升级：0 强制， 1不强制
+	 */
+
+	@Column(name = "is_force")
+	private Integer isForce;
 
 	/**
 	 * @return id
@@ -309,6 +315,14 @@ public class Inno72Task {
 
 	public void setChannelCode(String channelCode) {
 		this.channelCode = channelCode;
+	}
+
+	public Integer getIsForce() {
+		return isForce;
+	}
+
+	public void setIsForce(Integer isForce) {
+		this.isForce = isForce;
 	}
 
 }

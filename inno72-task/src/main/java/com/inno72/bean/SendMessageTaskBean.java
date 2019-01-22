@@ -12,6 +12,11 @@ public class SendMessageTaskBean {
 	private String machineId;
 	private String id;
 	private Object data;
+	/**
+	 * 强制升级：0 强制， 1不强制
+	 */
+
+	private Integer isForce;
 
 	public Integer getEventType() {
 		return eventType;
@@ -59,6 +64,14 @@ public class SendMessageTaskBean {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public Integer getIsForce() {
+		return isForce;
+	}
+
+	public void setIsForce(Integer isForce) {
+		this.isForce = isForce;
 	}
 
 	// public static void main(String[] args) {
