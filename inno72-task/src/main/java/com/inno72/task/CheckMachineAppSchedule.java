@@ -2,7 +2,9 @@ package com.inno72.task;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -14,16 +16,17 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.inno72.bean.SendMessageBean;
+import com.inno72.common.TaskProperties;
 import com.inno72.common.utils.StringUtil;
 import com.inno72.job.core.biz.model.ReturnT;
 import com.inno72.job.core.handle.IJobHandler;
 import com.inno72.job.core.handle.annotation.JobHandler;
-import com.inno72.model.Inno72AppMsg;
 import com.inno72.redis.IRedisUtil;
-import com.inno72.service.AppMsgService;
 import com.inno72.util.AesUtils;
 import com.inno72.util.GZIPUtil;
+import com.inno72.util.HttpFormConnector;
 import com.inno72.vo.AppInstallHistory;
+import com.inno72.vo.AppMsgVo;
 import com.inno72.vo.AppStatus;
 import com.inno72.vo.AppVersion;
 import com.inno72.vo.MachineAppStatus;
@@ -38,8 +41,8 @@ public class CheckMachineAppSchedule implements IJobHandler {
 	@Resource
 	private IRedisUtil redisUtil;
 
-	@Autowired
-	private AppMsgService appMsgService;
+	@Resource
+	private TaskProperties taskProperties;
 
 	public void checkApp(MachineAppStatus apps) {
 		if (apps != null && apps.getStatus() != null) {
@@ -80,18 +83,19 @@ public class CheckMachineAppSchedule implements IJobHandler {
 				msg.setData(il);
 				history.setStatus(1);
 				String result = GZIPUtil.compress(AesUtils.encrypt(JSON.toJSONString(msg)));
-				String machinKey = "monitor:session:" + msg.getMachineId();
-				String sessionId = redisUtil.get(machinKey);
-				if (!com.inno72.common.utils.StringUtil.isEmpty(sessionId)) {
-					Inno72AppMsg msg1 = new Inno72AppMsg();
-					msg1.setId(StringUtil.uuid());
-					msg1.setCreateTime(LocalDateTime.now());
-					msg1.setMachineCode(msg.getMachineId());
-					msg1.setContent(result);
-					msg1.setStatus(0);
-					msg1.setMsgType(1);
-					appMsgService.save(msg1);
-					history.setStatus(2);
+
+				String url = taskProperties.get("sendMsgUrl");
+				AppMsgVo vo = new AppMsgVo();
+				vo.setData(result);
+				vo.setIsQueue(1);
+				vo.setTargetCode(msg.getMachineId());
+				vo.setTargetType("1");
+				try {
+					Map<String, String> headers = new HashMap<>();
+					headers.put("MsgType", "message");
+					HttpFormConnector.doPostJson(url, JSON.toJSONString(vo), headers, 5000);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 			mongoTpl.save(history, "AppInstallHistory");
